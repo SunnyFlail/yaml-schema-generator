@@ -1,0 +1,35 @@
+{
+    "name": "sunnyflail/yaml-schema-generator",
+    "description": "A simple library for generating yaml json schema from php classes",
+    "type": "library",
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.61",
+        "vimeo/psalm": "^5.25"
+    },
+    "autoload": {
+        "psr-4": {
+            "SunnyFlail\\YamlSchemaGenerator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SunnyFlail\\YamlSchemaGenerator\\Tests\\": "tests/",
+            "SunnyFlail\\YamlSchemaGenerator\\Dev\\": "dev/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Patryk Ćwikliński",
+            "email": "sunny.flail@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "^7.1"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "bin": [
+        "bin/generate-yaml-schema"
+    ]
+}
