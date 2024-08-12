@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SunnyFlail\YamlSchemaGenerator\Dev;
+namespace SunnyFlail\YamlSchemaGenerator\Misc;
 
 use SunnyFlail\YamlSchemaGenerator\Parser\ClassParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\MetaProperty\MetaPropertyLoader;

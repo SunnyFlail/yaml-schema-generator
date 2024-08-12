@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 use SunnyFlail\YamlSchemaGenerator\Cli\Symfony\GenerateSchema;
-use SunnyFlail\YamlSchemaGenerator\Dev\Container;
+use SunnyFlail\YamlSchemaGenerator\Misc\Container;
 use SunnyFlail\YamlSchemaGenerator\FileSystem\FileSystem;
 use SunnyFlail\YamlSchemaGenerator\Serializer\MappingSerializer;
 

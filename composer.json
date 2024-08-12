@@ -14,8 +14,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "SunnyFlail\\YamlSchemaGenerator\\Tests\\": "tests/",
-            "SunnyFlail\\YamlSchemaGenerator\\Dev\\": "dev/"
+            "SunnyFlail\\YamlSchemaGenerator\\Tests\\": "tests/"
         }
     },
     "authors": [

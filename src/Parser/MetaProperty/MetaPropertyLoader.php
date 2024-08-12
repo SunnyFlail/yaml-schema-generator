@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SunnyFlail\YamlSchemaGenerator\Parser\MetaProperty;
 
-use SunnyFlail\YamlSchemaGenerator\Dev\StaticProperty;
+use SunnyFlail\YamlSchemaGenerator\Misc\StaticProperty;
 use SunnyFlail\YamlSchemaGenerator\Parser\MappingBuilder\MappingBuilder;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserInterface;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Resolver\TypeResolverInterface;

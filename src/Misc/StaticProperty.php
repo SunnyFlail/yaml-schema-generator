@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SunnyFlail\YamlSchemaGenerator\Dev;
+namespace SunnyFlail\YamlSchemaGenerator\Misc;
 
 final readonly class StaticProperty
 {
