@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+error_reporting(E_ALL);
+
 use SunnyFlail\YamlSchemaGenerator\Cli\Symfony\GenerateSchema;
 use SunnyFlail\YamlSchemaGenerator\Misc\Container;
 use SunnyFlail\YamlSchemaGenerator\FileSystem\FileSystem;

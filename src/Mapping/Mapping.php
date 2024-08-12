@@ -98,6 +98,13 @@ final readonly class Mapping implements \JsonSerializable
 
     public int $maximum;
 
+    /**
+     * @var string[]
+     */
+    #[RequiredItemType(Type::STRING->value)]
+    #[RequiredKeyType(KeyType::NUMBER)]
+    public array $required;
+
     public function jsonSerialize(): array
     {
         $arr = [];

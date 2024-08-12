@@ -11,6 +11,7 @@ use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\ObjectTypeMappingPa
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\PrimitiveTypeMappingParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserAggregate;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserInterface;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyOptionalityResolver\PropertyOptionalityResolver;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyParser\PropertyParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Reader\TypeReader;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Resolver\TypeResolver;
@@ -47,6 +48,9 @@ final readonly class Container
         ;
         $reflection->getProperty('metaPropertyLoader')
             ->setValue($classParser, $metaPropertyLoader)
+        ;
+        $reflection->getProperty('propertyOptionalityResolver')
+            ->setValue($classParser, new PropertyOptionalityResolver())
         ;
 
         return $classParser;

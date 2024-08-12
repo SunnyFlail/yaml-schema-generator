@@ -8,6 +8,7 @@ use SunnyFlail\YamlSchemaGenerator\Mapping\Mapping;
 use SunnyFlail\YamlSchemaGenerator\Mapping\Type;
 use SunnyFlail\YamlSchemaGenerator\Parser\MappingBuilder\MappingBuilder;
 use SunnyFlail\YamlSchemaGenerator\Parser\MetaProperty\MetaPropertyLoaderInterface;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyOptionalityResolver\PropertyOptionalityResolverInterface;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyParser\PropertyParserInterface;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Reader\TypeReaderInterface;
 use SunnyFlail\YamlSchemaGenerator\Settings\Exclude;
@@ -17,7 +18,8 @@ final readonly class ClassParser implements ClassParserInterface
     public function __construct(
         private TypeReaderInterface $typeReader,
         private PropertyParserInterface $propertyParser,
-        private MetaPropertyLoaderInterface $metaPropertyLoader
+        private MetaPropertyLoaderInterface $metaPropertyLoader,
+        private PropertyOptionalityResolverInterface $propertyOptionalityResolver
     ) {}
 
     public function parseClass(string $class): Mapping
@@ -36,6 +38,7 @@ final readonly class ClassParser implements ClassParserInterface
         \ReflectionClass $reflection
     ): void {
         $properties = [];
+        $required = [];
 
         foreach ($reflection->getProperties() as $property) {
             if ($property->getAttributes(Exclude::class)) {
@@ -43,9 +46,17 @@ final readonly class ClassParser implements ClassParserInterface
             }
 
             $properties[$property->getName()] = $this->getPropertyMapping($property);
+
+            if ($this->propertyOptionalityResolver->isPropertyRequired($property)) {
+                $required[] = $property->getName();
+            }
         }
 
         $builder->properties = $properties;
+
+        if ($required) {
+            $builder->required = $required;
+        }
     }
 
     private function getPropertyMapping(\ReflectionProperty $property): Mapping
