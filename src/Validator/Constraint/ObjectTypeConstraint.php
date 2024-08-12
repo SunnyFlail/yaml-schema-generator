@@ -16,8 +16,5 @@ final readonly class ObjectTypeConstraint extends TypeRequiresFieldsConstraint
     protected function getRequiredFields(): iterable
     {
         return [];
-        // yield 'properties';
-        // yield 'additionalProperties';
-        // yield 'patternProperties';
     }
 }

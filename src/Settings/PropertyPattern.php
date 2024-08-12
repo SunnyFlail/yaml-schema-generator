@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SunnyFlail\YamlSchemaGenerator\Settings;
 
-#[\Attribute()]
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::IS_REPEATABLE)]
 final readonly class PropertyPattern
 {
     public function __construct(

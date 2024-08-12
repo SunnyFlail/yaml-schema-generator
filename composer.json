@@ -1,5 +1,6 @@
 {
     "name": "sunnyflail/yaml-schema-generator",
+    "keywords": ["dev"],
     "description": "A simple library for generating yaml json schema from php classes",
     "type": "library",
     "require-dev": {

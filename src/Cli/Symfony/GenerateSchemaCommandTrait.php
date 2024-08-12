@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SunnyFlail\YamlSchemaGenerator\Cli\Symfony;
 
 use SunnyFlail\YamlSchemaGenerator\FileSystem\FileSystemInterface;
-use SunnyFlail\YamlSchemaGenerator\Mapping\Mapping;
 use SunnyFlail\YamlSchemaGenerator\Parser\ClassParserInterface;
 use SunnyFlail\YamlSchemaGenerator\Serializer\MappingSerializerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -98,7 +97,7 @@ trait GenerateSchemaCommandTrait
             $outputPath = substr($outputPath, 2);
         }
 
-        return getcwd() . '/' . $outputPath;
+        return getcwd().'/'.$outputPath;
     }
 
     private function requireFiles(InputInterface $input): void

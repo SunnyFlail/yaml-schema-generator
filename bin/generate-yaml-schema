@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use SunnyFlail\YamlSchemaGenerator\Cli\Symfony\GenerateSchema;
+use SunnyFlail\YamlSchemaGenerator\Dev\Container;
+use SunnyFlail\YamlSchemaGenerator\FileSystem\FileSystem;
+use SunnyFlail\YamlSchemaGenerator\Serializer\MappingSerializer;
+
+require_once $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
+
+return (new GenerateSchema(
+    (new Container())->createClassParser(),
+    new MappingSerializer(),
+    new FileSystem()
+))->run();

@@ -56,6 +56,6 @@ final readonly class ArrayTypeMappingParser implements TypeMappingParserStrategy
             return $type->newInstance()->allowedTypes;
         }
 
-        throw new \Exception();
+        throw new \LogicException(sprintf('Type not provided for items of %s::', $property->getDeclaringClass()->getShortName(), $property->getName()));
     }
 }

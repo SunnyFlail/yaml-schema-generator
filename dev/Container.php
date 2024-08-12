@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SunnyFlail\YamlSchemaGenerator\Dev;
 
 use SunnyFlail\YamlSchemaGenerator\Parser\ClassParser;
@@ -8,22 +10,33 @@ use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\ArrayTypeMappingPar
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\ObjectTypeMappingParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\PrimitiveTypeMappingParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserAggregate;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserInterface;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyParser\PropertyParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Reader\TypeReader;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Resolver\TypeResolver;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\Resolver\TypeResolverInterface;
 
 final readonly class Container
 {
     public function createClassParser(): ClassParser
     {
         $reflection = new \ReflectionClass(ClassParser::class);
+        $typeMappingParser = (new \ReflectionClass(TypeMappingParserAggregate::class))
+            ->newInstanceWithoutConstructor()
+        ;
         $classParser = $reflection->newInstanceWithoutConstructor();
         $typeReader = $this->createTypeReader();
-        $metaPropertyLoader = $this->createMetaPropertyLoader();
+        $typeResolver = $this->createTypeResolver();
+        $metaPropertyLoader = $this->createMetaPropertyLoader(
+            $typeResolver,
+            $typeMappingParser
+        );
         $propertyParser = $this->createPropertyParser(
             $classParser,
             $typeReader,
-            $metaPropertyLoader
+            $metaPropertyLoader,
+            $typeResolver,
+            $typeMappingParser
         );
 
         $reflection->getProperty('typeReader')
@@ -44,31 +57,35 @@ final readonly class Container
         return new TypeReader();
     }
 
-    private function createMetaPropertyLoader(): MetaPropertyLoader
-    {
-        return new MetaPropertyLoader();
+    private function createMetaPropertyLoader(
+        TypeResolverInterface $typeResolver,
+        TypeMappingParserInterface $typeMappingParser
+    ): MetaPropertyLoader {
+        return new MetaPropertyLoader($typeResolver, $typeMappingParser);
     }
 
     private function createPropertyParser(
         ClassParser $classParser,
         TypeReader $typeReader,
-        MetaPropertyLoader $metaPropertyLoader
-    ): PropertyParser
-    {
+        MetaPropertyLoader $metaPropertyLoader,
+        TypeResolverInterface $typeResolver,
+        TypeMappingParserAggregate $typeMappingParser
+    ): PropertyParser {
         $reflection = new \ReflectionClass(PropertyParser::class);
         $propertyParser = $reflection->newInstanceWithoutConstructor();
-        
+
         $reflection->getProperty('typeResolver')->setValue(
             $propertyParser,
-            $this->createTypeResolver()
+            $typeResolver
         );
         $reflection->getProperty('typeMappingParser')->setValue(
             $propertyParser,
-            $this->createTypeMappingParser(
+            $this->configureTypeMappingParser(
+                $typeMappingParser,
                 $classParser,
                 $typeReader,
                 $propertyParser,
-                $metaPropertyLoader
+                $metaPropertyLoader,
             )
         );
 
@@ -80,15 +97,14 @@ final readonly class Container
         return new TypeResolver();
     }
 
-    private function createTypeMappingParser(
+    private function configureTypeMappingParser(
+        TypeMappingParserAggregate $typeMappingParser,
         ClassParser $classParser,
         TypeReader $typeReader,
         PropertyParser $propertyParser,
         MetaPropertyLoader $metaPropertyLoader
-    ): TypeMappingParserAggregate
-    {
+    ): TypeMappingParserAggregate {
         $reflection = new \ReflectionClass(TypeMappingParserAggregate::class);
-        $typeMappingParser = $reflection->newInstanceWithoutConstructor();
 
         $strategies = [
             new PrimitiveTypeMappingParser(
@@ -100,7 +116,7 @@ final readonly class Container
                 $propertyParser,
                 $metaPropertyLoader
             ),
-            new ObjectTypeMappingParser($classParser)
+            new ObjectTypeMappingParser($classParser),
         ];
 
         $reflection->getProperty('strategies')->setValue($typeMappingParser, $strategies);
