@@ -8,15 +8,16 @@ use SunnyFlail\YamlSchemaGenerator\Mapping\Mapping;
 use SunnyFlail\YamlSchemaGenerator\Mapping\Type;
 use SunnyFlail\YamlSchemaGenerator\Parser\MappingBuilder\MappingBuilder;
 use SunnyFlail\YamlSchemaGenerator\Parser\MetaProperty\MetaPropertyLoaderInterface;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMetaPropertyLoader\TypeMetaPropertyLoaderInterface;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyParser\PropertyParserInterface;
 use SunnyFlail\YamlSchemaGenerator\Settings\ArrayItems;
 
 final readonly class ArrayTypeMappingParser implements TypeMappingParserStrategy
 {
     public function __construct(
-        private TypeMappingParserInterface $typeMappingParser,
         private PropertyParserInterface $propertyParser,
-        private MetaPropertyLoaderInterface $metaPropertyLoader
+        private MetaPropertyLoaderInterface $metaPropertyLoader,
+        private TypeMetaPropertyLoaderInterface $typeMetaPropertyLoader
     ) {}
 
     public function supports(Type $type): bool
@@ -30,6 +31,7 @@ final readonly class ArrayTypeMappingParser implements TypeMappingParserStrategy
         $builder->type = [$type];
         $builder->items = $this->createTypesMapping($property);
         $this->metaPropertyLoader->load($builder, $property);
+        $this->typeMetaPropertyLoader->loadMetaProperties($builder, $property, $type, $typeString);
 
         return $builder->create();
     }

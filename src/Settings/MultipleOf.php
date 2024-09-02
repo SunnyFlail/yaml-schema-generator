@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace SunnyFlail\YamlSchemaGenerator\Settings;
 
-/**
- * Overrides resolved optionality of a property.
- */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-final readonly class Required
+final readonly class MultipleOf
 {
     public function __construct(
-        public bool $required = true
+        public int|float $multipleOf
     ) {}
 }

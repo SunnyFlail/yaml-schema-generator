@@ -11,6 +11,11 @@ use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\ObjectTypeMappingPa
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\PrimitiveTypeMappingParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserAggregate;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserInterface;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMetaPropertyLoader\ArrayMetaPropertyLoader;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMetaPropertyLoader\EnumMetaPropertyLoader;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMetaPropertyLoader\NumberMetaPropertyLoader;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMetaPropertyLoader\StringMetaPropertyLoader;
+use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMetaPropertyLoader\TypeMetaPropertyLoaderAggregate;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyOptionalityResolver\PropertyOptionalityResolver;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\PropertyParser\PropertyParser;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Reader\TypeReader;
@@ -110,15 +115,23 @@ final readonly class Container
     ): TypeMappingParserAggregate {
         $reflection = new \ReflectionClass(TypeMappingParserAggregate::class);
 
+        $typeMetaPropertyLoader = new TypeMetaPropertyLoaderAggregate(
+            new NumberMetaPropertyLoader(),
+            new ArrayMetaPropertyLoader(),
+            new EnumMetaPropertyLoader(),
+            new StringMetaPropertyLoader(),
+        );
+
         $strategies = [
             new PrimitiveTypeMappingParser(
                 $typeReader,
-                $metaPropertyLoader
+                $metaPropertyLoader,
+                $typeMetaPropertyLoader
             ),
             new ArrayTypeMappingParser(
-                $typeMappingParser,
                 $propertyParser,
-                $metaPropertyLoader
+                $metaPropertyLoader,
+                $typeMetaPropertyLoader
             ),
             new ObjectTypeMappingParser($classParser),
         ];

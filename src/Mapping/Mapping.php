@@ -17,6 +17,9 @@ final readonly class Mapping implements \JsonSerializable
 
     private const ARRAYS_TO_FLATTEN_ON_SINGLE_VALUE = [
         'type',
+        'oneOf',
+        'allOf',
+        'anyOf',
     ];
 
     private const META_PROPERTIES = [
@@ -94,9 +97,18 @@ final readonly class Mapping implements \JsonSerializable
     #[RequiredKeyType(KeyType::STRING)]
     public array $definitions;
 
-    public int $minimum;
+    public int|float $minimum;
 
-    public int $maximum;
+    public int|float $maximum;
+
+    public int|float $exclusiveMinimum;
+    public int|float $exclusiveMaximum;
+
+    public int $minLength;
+
+    public int $maxLength;
+
+    public string $pattern;
 
     /**
      * @var string[]

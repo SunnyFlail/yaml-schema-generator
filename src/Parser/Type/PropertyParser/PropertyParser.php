@@ -10,12 +10,14 @@ use SunnyFlail\YamlSchemaGenerator\Parser\MappingBuilder\MappingBuilder;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\MappingParser\TypeMappingParserInterface;
 use SunnyFlail\YamlSchemaGenerator\Parser\Type\Resolver\TypeResolverInterface;
 
-final readonly class PropertyParser implements PropertyParserInterface
+// final readonly class PropertyParser implements PropertyParserInterface
+final class PropertyParser implements PropertyParserInterface
 {
     public function __construct(
         private TypeResolverInterface $typeResolver,
         private TypeMappingParserInterface $typeMappingParser,
     ) {}
+    private bool $debug = false;
 
     public function parse(
         \ReflectionProperty $property,
@@ -32,6 +34,9 @@ final readonly class PropertyParser implements PropertyParserInterface
             );
         }
 
+        if ('arrayOfNumbersOrStrings' === $property->getName() && !in_array('array', $typeStrings)) {
+            $this->debug = true;
+        }
         if (!$type) {
             throw new NoTypeDefinitionAvailableException($property);
         }
