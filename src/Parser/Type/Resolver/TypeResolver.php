@@ -36,6 +36,7 @@ final readonly class TypeResolver implements TypeResolverInterface
             throw new \Exception('Not backed enums are not supported!');
         }
 
+        /** @psalm-suppress UndefinedMethod */
         return $this->resolveType($reflection->getBackingType()->getName());
     }
 }
